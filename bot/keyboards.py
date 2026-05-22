@@ -17,3 +17,9 @@ catalog = InlineKeyboardMarkup( # Buttons under message
           InlineKeyboardButton(text="callback_2",callback_data='cbd_2')]
     ]
 )
+
+get_contact = ReplyKeyboardMarkup(
+    keyboard=[
+        [KeyboardButton(text="Send ur number", request_contact=True)]
+    ]
+)
