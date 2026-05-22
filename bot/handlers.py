@@ -1,5 +1,5 @@
 from aiogram import Router, F
-from aiogram.types import Message
+from aiogram.types import Message, CallbackQuery
 from aiogram.filters.command import CommandStart, Command
 import bot.keyboards as kb 
 
@@ -23,6 +23,9 @@ async def cmd_photo(message: Message):
 async def cmd_hi(message: Message):
     await message.answer(f"hi")
 
+@router.callback_query(F.data == 'cbd')
+async def check_callback(callback: CallbackQuery):
+    await callback.message.answer("Ur first callback!")
 
 @router.message() # Handle everything
 async def echo(message: Message):

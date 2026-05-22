@@ -12,8 +12,8 @@ menu = ReplyKeyboardMarkup( # Large buttons under your keyboard
 
 catalog = InlineKeyboardMarkup( # Buttons under message
     inline_keyboard=[
-        [InlineKeyboardButton(text="a",url="https://www.youtube.com/watch?v=dQw4w9WgXcQ")], # When pressed, it execute argument
-        [InlineKeyboardButton(text="b",url="https://www.youtube.com/watch?v=dQw4w9WgXcQ"),
+        [InlineKeyboardButton(text="url",url="https://www.youtube.com/watch?v=dQw4w9WgXcQ")], # When pressed, it execute argument
+        [InlineKeyboardButton(text="callback",callback_data='cbd'),
           InlineKeyboardButton(text="c",url="https://www.youtube.com/watch?v=dQw4w9WgXcQ")]
     ]
 )
