@@ -25,6 +25,7 @@ async def cmd_hi(message: Message):
 
 @router.callback_query(F.data == 'cbd')
 async def check_callback(callback: CallbackQuery):
+    await callback.answer('close Callback', show_alert=True) # Text in mid of the screen
     await callback.message.answer("Ur first callback!")
 
 @router.message() # Handle everything
