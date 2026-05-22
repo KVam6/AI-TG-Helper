@@ -1,2 +1,7 @@
 .env
 .venv
+__pycache__
+
+#Bot
+bot/__pycache__
+bot/test
