@@ -1,0 +1,19 @@
+from aiogram.types import (ReplyKeyboardMarkup, KeyboardButton,
+                            InlineKeyboardButton, InlineKeyboardMarkup)
+
+menu = ReplyKeyboardMarkup( # Large buttons under your keyboard
+    keyboard=[
+        [KeyboardButton(text="button1")], # When pressed, it just send button's text to the chat
+        [KeyboardButton(text="button2"), KeyboardButton(text="button3")]
+    ],
+    resize_keyboard=True,
+    input_field_placeholder='Pick smth'
+)
+
+catalog = InlineKeyboardMarkup( # Buttons under message
+    inline_keyboard=[
+        [InlineKeyboardButton(text="a",url="https://www.youtube.com/watch?v=dQw4w9WgXcQ")], # When pressed, it execute argument
+        [InlineKeyboardButton(text="b",url="https://www.youtube.com/watch?v=dQw4w9WgXcQ"),
+          InlineKeyboardButton(text="c",url="https://www.youtube.com/watch?v=dQw4w9WgXcQ")]
+    ]
+)
