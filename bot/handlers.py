@@ -23,9 +23,10 @@ async def cmd_photo(message: Message):
 async def cmd_hi(message: Message):
     await message.answer(f"hi")
 
-@router.callback_query(F.data == 'cbd')
+@router.callback_query(F.data.startswith("cbd_"))
 async def check_callback(callback: CallbackQuery):
-    await callback.answer('close Callback', show_alert=True) # Text in mid of the screen
+    cb = callback.data.split('_')[1] # Using something like "tag" and getting it's text
+    await callback.answer(f'close Callback {cb}', show_alert=True) # Text in mid of the screen
     await callback.message.answer("Ur first callback!")
 
 @router.message() # Handle everything
