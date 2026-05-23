@@ -2,6 +2,7 @@ from aiogram import Bot, Dispatcher
 from aiogram.client.session.aiohttp import AiohttpSession
 from aiogram.client.telegram import TelegramAPIServer 
 
+from utils.logger import logger
 from bot.handlers import router
 from config import WORKER_URL, BOT_TOKEN
 
@@ -13,4 +14,5 @@ async def main():
     dp = Dispatcher()
 
     dp.include_router(router) # Include handlers from file
+    logger.info("✅ Bot is working!")
     await dp.start_polling(bot)
