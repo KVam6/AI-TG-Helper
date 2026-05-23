@@ -1,6 +1,15 @@
 from aiogram.types import (ReplyKeyboardMarkup, KeyboardButton,
                             InlineKeyboardButton, InlineKeyboardMarkup)
 
+
+
+start_keyboard = InlineKeyboardMarkup(
+    inline_keyboard=[
+        ...
+    ]
+)
+
+# Just for example
 menu = ReplyKeyboardMarkup( # Large buttons under your keyboard
     keyboard=[
         [KeyboardButton(text="button1")], # When pressed, it just send button's text to the chat
