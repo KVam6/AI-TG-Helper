@@ -69,9 +69,10 @@ async def Model_name(message: Message, state: FSMContext):
 @flags.chat_action(ChatAction.TYPING)
 async def Model_name(message: Message, state: FSMContext):
     data = await state.get_data()
-    completion = await make_completion(message.text)
+    completion = await make_completion(message.text, data["name"])
     await message.answer(
-        completion.choices[0].message.content
+        completion.choices[0].message.content,
+        parse_mode="HTML"
     )
 
 # OTHER
