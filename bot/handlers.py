@@ -2,8 +2,12 @@ from aiogram import Router, F
 from aiogram.types import Message, CallbackQuery, ReplyKeyboardRemove
 from aiogram.fsm.context import FSMContext
 from aiogram.filters.command import CommandStart, Command
+from aiogram import flags
+from aiogram.enums.chat_action import ChatAction
+from aiogram.utils.chat_action import ChatActionMiddleware
 
 from bot.states import Model
+from ai.client import make_completion
 import bot.keyboards as kb 
 
 router = Router()
@@ -62,9 +66,13 @@ async def Model_name(message: Message, state: FSMContext):
         await message.answer(f"Прекрасно, выбран {data["name"]}, можешь писать свой запрос!")
 
 @router.message(Model.WaitingForRequest)
+@flags.chat_action(ChatAction.TYPING)
 async def Model_name(message: Message, state: FSMContext):
     data = await state.get_data()
-    await message.answer(f"запрос к {data["name"]}")
+    completion = await make_completion(message.text)
+    await message.answer(
+        completion.choices[0].message.content
+    )
 
 # OTHER
 @router.message() # Handle everything

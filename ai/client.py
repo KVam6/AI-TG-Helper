@@ -1,19 +1,15 @@
-from openai import OpenAI
+from openai import AsyncOpenAI  
 
 from config import OPENROUTER_KEY
 
-client = OpenAI(
+client = AsyncOpenAI(
     base_url="https://openrouter.ai/api/v1",
     api_key=OPENROUTER_KEY,
 )
 
-completion = client.chat.completions.create(
-model='openai/gpt-oss-120b:free', 
-messages=[
-    {
-        "role": "user",
-        "content": "Передай привет всему миру, how are u"
-    }
-]
-)
-#print(completion.choices[0].message.content)
+async def make_completion(request: str):
+    completion = await client.chat.completions.create(
+        model='openai/gpt-oss-120b:free', 
+        messages=[{"role": "user", "content": request}]
+    )
+    return completion

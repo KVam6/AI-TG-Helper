@@ -3,12 +3,12 @@ from aiogram.types import (ReplyKeyboardMarkup, KeyboardButton,
 
 buttons_text = {
     "FastMode" : "Режим только ответы",
-    "ExpertMode" : "Режим полное объяснение"
+    "DetailedMode" : "Режим полное объяснение"
 }
 
 start_keyboard = ReplyKeyboardMarkup(
     keyboard=[
-        [KeyboardButton(text=buttons_text["FastMode"]), KeyboardButton(text=buttons_text["ExpertMode"])]
+        [KeyboardButton(text=buttons_text["FastMode"]), KeyboardButton(text=buttons_text["DetailedMode"])]
     ],
     resize_keyboard=True
 )

@@ -1,6 +1,7 @@
 from aiogram import Bot, Dispatcher
 from aiogram.client.session.aiohttp import AiohttpSession
 from aiogram.client.telegram import TelegramAPIServer 
+from aiogram.utils.chat_action import ChatActionMiddleware
 
 from utils.logger import logger
 from bot.handlers import router
@@ -12,6 +13,7 @@ async def main():
 
     bot = Bot(token=BOT_TOKEN, session=session) # Setting up our bot
     dp = Dispatcher()
+    dp.message.middleware(ChatActionMiddleware())
 
     dp.include_router(router) # Include handlers from file
     logger.info("✅ Bot is working!")
