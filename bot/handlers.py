@@ -3,7 +3,7 @@ from aiogram.types import Message, CallbackQuery, ReplyKeyboardRemove
 from aiogram.fsm.context import FSMContext
 from aiogram.filters.command import CommandStart, Command
 
-from bot.states import Reg
+from bot.states import Model
 import bot.keyboards as kb 
 
 router = Router()
@@ -11,50 +11,62 @@ router = Router()
 # COMMANDS
 @router.message(CommandStart()) # Handle /start
 async def cmd_start(message: Message, state: FSMContext):
-    await message.answer("YaY\nIt's registration time!!!", 
-                         reply_markup=ReplyKeyboardRemove()) # Removing the keyboard
-    await state.set_state(Reg.name)
+    await message.answer(f"Привет, это твои персональный ИИ помощник!\nВыбери режим работы (его можно изменить в любой момент) и давай начнем", 
+                         reply_markup=kb.start_keyboard)
+    await state.set_state(Model.ChoosingModel)
 
-@router.message(Command('help')) # Handle /help
-async def cmd_start(message: Message):
-    await message.answer("no help here", reply_markup=kb.catalog) # Adding the keyboard
+# @router.message(Command('help')) # Handle /help
+# async def cmd_start(message: Message):
+#     await message.answer("no help here", reply_markup=kb.catalog) # Adding the keyboard
 
 # STATES
-@router.message(Reg.name)
-async def reg_name(message: Message, state: FSMContext):
-    await state.update_data(name=message.text)
-    await message.answer("Now it's phone contact time",reply_markup=kb.get_contact)
-    await state.set_state(Reg.contact)
-
-@router.message(Reg.contact, F.contact)
-async def reg_contact(message: Message, state: FSMContext):
-    await state.update_data(contact=message.contact.phone_number)
+# ---Choosing Model---
+@router.message(Model.ChoosingModel, F.text == kb.buttons_text["FastMode"])
+async def Model_name(message: Message, state: FSMContext):
+    await state.update_data(name="FastMode")
     data = await state.get_data()
-    await message.answer(f"U did it, ur name is {data['name']} and phone is {data['contact']}", reply_markup= ReplyKeyboardRemove())
-    await state.clear()
+    await message.answer(f"Прекрасно, выбран {data["name"]}, можешь писать свой запрос!")
+    await state.set_state(Model.WaitingForRequest)
 
-@router.message(Reg.contact)
-async def reg_contact(message: Message, state: FSMContext):
-    await message.answer("Use the button")
+@router.message(Model.ChoosingModel, F.text == kb.buttons_text["ExpertMode"])
+async def Model_name(message: Message, state: FSMContext):
+    await state.update_data(name="ExpertMode")
+    data = await state.get_data()
+    await message.answer(f"Прекрасно, выбран {data["name"]}, можешь писать свой запрос!")
+    await state.set_state(Model.WaitingForRequest)
 
+@router.message(Model.ChoosingModel)
+async def Model_name(message: Message, state: FSMContext):
+    await message.answer(f"Выбери режим работы используя кнопки",
+                         reply_markup=kb.start_keyboard)
 
+# ---Waiting For Request---
+@router.message(Model.WaitingForRequest, F.text == kb.buttons_text["FastMode"])
+async def Model_name(message: Message, state: FSMContext):
+    data = await state.get_data()
+    if data["name"] == "FastMode":
+        await message.answer(f"{data["name"]} уже выбран, можешь писать свой запрос!")
+    else:
+        await state.update_data(name="FastMode")
+        data = await state.get_data()
+        await message.answer(f"Прекрасно, выбран {data["name"]}, можешь писать свой запрос!")
+
+@router.message(Model.WaitingForRequest, F.text == kb.buttons_text["ExpertMode"])
+async def Model_name(message: Message, state: FSMContext):
+    data = await state.get_data()
+    if data["name"] == "ExpertMode":
+        await message.answer(f"{data["name"]} уже выбран, можешь писать свой запрос!")
+    else:
+        await state.update_data(name="ExpertMode")
+        data = await state.get_data()
+        await message.answer(f"Прекрасно, выбран {data["name"]}, можешь писать свой запрос!")
+
+@router.message(Model.WaitingForRequest)
+async def Model_name(message: Message, state: FSMContext):
+    data = await state.get_data()
+    await message.answer(f"запрос к {data["name"]}")
 
 # OTHER
-@router.message(F.photo) # Handle any photo
-async def cmd_photo(message: Message):
-    await message.answer(f"Photo not allowed, id = {message.photo[-1].file_id}")
-    await message.answer_photo(photo=message.photo[1].file_id)
-
-@router.message(F.text == 'button1') # Handle text 
-async def cmd_hi(message: Message):
-    await message.answer(f"hi")
-
-@router.callback_query(F.data.startswith("cbd_")) # Looking for "tag" "cbd_"
-async def check_callback(callback: CallbackQuery):
-    cb = callback.data.split('_')[1] # Using something like "tag" and getting it's text
-    await callback.answer(f'close Callback {cb}', show_alert=True) # Text in mid of the screen
-    await callback.message.answer("Ur first callback!")
-
 @router.message() # Handle everything
-async def echo(message: Message):
-    await message.send_copy(chat_id=message.from_user.id)
+async def echo(message: Message, state: FSMContext):
+    await message.answer(f"Ты не должен был сюда попасть, перезапусти бота /start")

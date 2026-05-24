@@ -1,5 +1,5 @@
 from aiogram.fsm.state import StatesGroup, State
 
-class Reg(StatesGroup):
-    name = State()
-    contact = State()
+class Model(StatesGroup):
+    ChoosingModel = State()
+    WaitingForRequest = State()

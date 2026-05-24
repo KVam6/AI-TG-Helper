@@ -1,34 +1,14 @@
 from aiogram.types import (ReplyKeyboardMarkup, KeyboardButton,
                             InlineKeyboardButton, InlineKeyboardMarkup)
 
+buttons_text = {
+    "FastMode" : "Режим только ответы",
+    "ExpertMode" : "Режим полное объяснение"
+}
 
-
-start_keyboard = InlineKeyboardMarkup(
-    inline_keyboard=[
-        ...
-    ]
-)
-
-# Just for example
-menu = ReplyKeyboardMarkup( # Large buttons under your keyboard
+start_keyboard = ReplyKeyboardMarkup(
     keyboard=[
-        [KeyboardButton(text="button1")], # When pressed, it just send button's text to the chat
-        [KeyboardButton(text="button2"), KeyboardButton(text="button3")]
+        [KeyboardButton(text=buttons_text["FastMode"]), KeyboardButton(text=buttons_text["ExpertMode"])]
     ],
-    resize_keyboard=True,
-    input_field_placeholder='Pick smth'
-)
-
-catalog = InlineKeyboardMarkup( # Buttons under message
-    inline_keyboard=[
-        [InlineKeyboardButton(text="url",url="https://www.youtube.com/watch?v=dQw4w9WgXcQ")], # When pressed, it execute argument
-        [InlineKeyboardButton(text="callback_1",callback_data='cbd_1'),
-          InlineKeyboardButton(text="callback_2",callback_data='cbd_2')]
-    ]
-)
-
-get_contact = ReplyKeyboardMarkup(
-    keyboard=[
-        [KeyboardButton(text="Send ur number", request_contact=True)]
-    ]
+    resize_keyboard=True
 )
