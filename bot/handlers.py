@@ -6,8 +6,9 @@ from aiogram import flags
 from aiogram.enums.chat_action import ChatAction
 from aiogram.utils.chat_action import ChatActionMiddleware
 
-from bot.states import Model
 from ai.client import make_completion
+from bot.states import Model
+from utils.text_formatter import format_for_telegram
 import bot.keyboards as kb 
 
 router = Router()
@@ -70,9 +71,10 @@ async def Model_name(message: Message, state: FSMContext):
 async def Model_name(message: Message, state: FSMContext):
     data = await state.get_data()
     completion = await make_completion(message.text, data["name"])
+    ai_answer = await format_for_telegram(completion.choices[0].message.content)
     await message.answer(
-        completion.choices[0].message.content,
-        parse_mode="HTML"
+        ai_answer,
+        parse_mode="MarkdownV2"
     )
 
 # OTHER

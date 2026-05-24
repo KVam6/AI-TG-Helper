@@ -2,3 +2,4 @@ aiogram>=3.28.2
 aiohttp_socks>=0.11.0
 dotenv>=0.9.9
 openai>=2.38.0
+telegramify_markdown>=1.1.5
