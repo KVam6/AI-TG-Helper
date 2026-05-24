@@ -28,9 +28,9 @@ async def Model_name(message: Message, state: FSMContext):
     await message.answer(f"Прекрасно, выбран {data["name"]}, можешь писать свой запрос!")
     await state.set_state(Model.WaitingForRequest)
 
-@router.message(Model.ChoosingModel, F.text == kb.buttons_text["ExpertMode"])
+@router.message(Model.ChoosingModel, F.text == kb.buttons_text["DetailedMode"])
 async def Model_name(message: Message, state: FSMContext):
-    await state.update_data(name="ExpertMode")
+    await state.update_data(name="DetailedMode")
     data = await state.get_data()
     await message.answer(f"Прекрасно, выбран {data["name"]}, можешь писать свой запрос!")
     await state.set_state(Model.WaitingForRequest)
@@ -51,13 +51,13 @@ async def Model_name(message: Message, state: FSMContext):
         data = await state.get_data()
         await message.answer(f"Прекрасно, выбран {data["name"]}, можешь писать свой запрос!")
 
-@router.message(Model.WaitingForRequest, F.text == kb.buttons_text["ExpertMode"])
+@router.message(Model.WaitingForRequest, F.text == kb.buttons_text["DetailedMode"])
 async def Model_name(message: Message, state: FSMContext):
     data = await state.get_data()
-    if data["name"] == "ExpertMode":
+    if data["name"] == "DetailedMode":
         await message.answer(f"{data["name"]} уже выбран, можешь писать свой запрос!")
     else:
-        await state.update_data(name="ExpertMode")
+        await state.update_data(name="DetailedMode")
         data = await state.get_data()
         await message.answer(f"Прекрасно, выбран {data["name"]}, можешь писать свой запрос!")
 
