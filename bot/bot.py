@@ -13,7 +13,6 @@ async def main():
 
     bot = Bot(token=BOT_TOKEN, session=session) # Setting up our bot
     dp = Dispatcher()
-    dp.message.middleware(ChatActionMiddleware())
 
     dp.include_router(router) # Include handlers from file
     logger.info("✅ Bot is working!")
