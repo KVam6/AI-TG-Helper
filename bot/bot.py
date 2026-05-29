@@ -1,6 +1,7 @@
 from aiogram import Bot, Dispatcher
 from aiogram.client.session.aiohttp import AiohttpSession
 from aiogram.client.telegram import TelegramAPIServer 
+from aiogram.utils.chat_action import ChatActionMiddleware
 
 from utils.logger import logger
 from bot.handlers import router
