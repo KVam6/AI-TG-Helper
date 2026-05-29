@@ -170,6 +170,14 @@ python main.py
 
 ---
 
+### Можно запустить через докер
+
+```bash
+docker build -t telegram-ai-bot .
+docker run --env-file .env telegram-ai-bot
+```
+---
+
 ## 📂 Структура проекта
 
 ```bash id="b9d6qp"
