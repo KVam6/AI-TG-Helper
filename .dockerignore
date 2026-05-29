@@ -5,6 +5,7 @@ dist
 build*
 run.spec
 AI-TG-Helper.7z
+.git
 
 #Bot
 bot/test
