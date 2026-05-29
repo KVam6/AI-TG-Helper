@@ -26,3 +26,9 @@ def _strip_md_in_tables(text: str) -> str:
 async def format_for_telegram(markdown_text: str) -> str:
     text = _strip_md_in_tables(markdown_text)
     return telegramify_markdown.markdownify(text)
+
+def split_text(text: str, size: int = 4000):
+    return [
+        text[i:i + size]
+        for i in range(0, len(text), size)
+    ]

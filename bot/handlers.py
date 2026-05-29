@@ -11,7 +11,7 @@ import asyncio
 
 from ai.client import make_completion
 from bot.states import Model
-from utils.text_formatter import format_for_telegram
+from utils.text_formatter import format_for_telegram, split_text
 import bot.keyboards as kb 
 
 router = Router()
@@ -92,7 +92,6 @@ async def Model_name(message: Message, state: FSMContext):
     async with chat_locks[message.chat.id]:
         data = await state.get_data()
 
-        # запускаем "печатает..." в фоне
         typing_task = asyncio.create_task(
             typing_loop(
                 message.bot,
@@ -101,48 +100,56 @@ async def Model_name(message: Message, state: FSMContext):
         )
 
         try:
-            try:
-                completion = await make_completion(
+            completion = await asyncio.wait_for(
+                make_completion(
                     message.text,
                     data["name"],
-                )
+                ),
+                timeout=60
+            )
 
-            except Exception:
-                await message.reply(
-                    "⚠️ Произошла ошибка при обращении к модели. Попробуй ещё раз."
-                )
-                return
+        except asyncio.TimeoutError:
+            await message.reply(
+                "⚠️ Модель слишком долго отвечает."
+            )
+            return
+
+        except Exception as e:
+            print(e)
+
+            await message.reply(
+                "⚠️ Ошибка при обращении к модели."
+            )
+            return
 
         finally:
-            # остановить "печатает..."
             typing_task.cancel()
+
+            try:
+                await typing_task
+            except asyncio.CancelledError:
+                pass
 
         if completion is None:
             await message.reply(
-                "⚠️ Модель долго отвечает. Попробуй ещё раз через пару секунд."
+                "⚠️ Модель не ответила."
             )
             return
 
         text = completion.choices[0].message.content
 
-        # сначала markdown
         try:
             formatted = await format_for_telegram(text)
 
-            await message.reply(
-                formatted,
-                parse_mode="MarkdownV2"
-            )
-
-        # если markdown сломался
-        except Exception:
-            try:
-                await message.reply(text)
-
-            except Exception:
+            for chunk in split_text(formatted):
                 await message.reply(
-                    "⚠️ Произошла внутренняя ошибка."
+                    chunk,
+                    parse_mode="MarkdownV2"
                 )
+
+        except Exception:
+            for chunk in split_text(text):
+                await message.reply(chunk)
 
 # OTHER
 @router.message() # Handle everything
