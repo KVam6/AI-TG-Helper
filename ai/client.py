@@ -8,10 +8,7 @@ client = AsyncOpenAI(
     timeout=60.0,
 )
 
-async def make_completion(
-    request: str,
-    mode: str,
-):
+async def make_completion(requests, mode):
     try:
         completion = await client.chat.completions.create(
             model="openai/gpt-oss-120b:free",
@@ -19,12 +16,8 @@ async def make_completion(
                 {
                     "role": "system",
                     "content": PROMPTS[mode],
-                },
-                {
-                    "role": "user",
-                    "content": request,
-                },
-            ],
+                }
+            ] + requests,
         )
 
         return completion

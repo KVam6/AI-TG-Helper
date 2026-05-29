@@ -40,9 +40,6 @@ async def cmd_start(message: Message, state: FSMContext):
                          reply_markup=kb.start_keyboard)
     await state.set_state(Model.ChoosingModel)
 
-# @router.message(Command('help')) # Handle /help
-# async def cmd_start(message: Message):
-#     await message.answer("no help here", reply_markup=kb.catalog) # Adding the keyboard
 
 # STATES
 # ---Choosing Model---
@@ -92,6 +89,17 @@ async def Model_name(message: Message, state: FSMContext):
     async with chat_locks[message.chat.id]:
         data = await state.get_data()
 
+        history = data.get("history", [])
+
+        history.append(
+            {
+                "role": "user",
+                "content": message.text,
+            }
+        )
+
+        await state.update_data(history=history)
+
         typing_task = asyncio.create_task(
             typing_loop(
                 message.bot,
@@ -102,7 +110,7 @@ async def Model_name(message: Message, state: FSMContext):
         try:
             completion = await asyncio.wait_for(
                 make_completion(
-                    message.text,
+                    history,
                     data["name"],
                 ),
                 timeout=60
@@ -137,6 +145,18 @@ async def Model_name(message: Message, state: FSMContext):
             return
 
         text = completion.choices[0].message.content
+        data = await state.get_data()
+
+        history = data.get("history", [])
+
+        history.append(
+            {
+                "role": "assistant",
+                "content": text,
+            }
+        )
+
+        await state.update_data(history=history)
 
         try:
             formatted = await format_for_telegram(text)
