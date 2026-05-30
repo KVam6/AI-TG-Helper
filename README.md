@@ -118,6 +118,7 @@ Cloudflare Worker помогает:
 * aiogram 3
 * asyncio
 * OpenRouter API
+* OpenAI API
 * Cloudflare Workers
 * python-dotenv
 
@@ -176,36 +177,21 @@ python run.py
 docker build -t telegram-ai-bot .
 docker run --env-file .env telegram-ai-bot
 ```
----
-
-## 📂 Структура проекта
-
-```bash id="b9d6qp"
-telegram-ai-bot/
-│
-├── main.py
-├── config.py
-├── prompts.py
-├── keyboards.py
-├── requirements.txt
-├── .env.example
-└── README.md
-```
 
 ---
 
 ## ⚙️ Настройка режимов
 
-Файл `prompts.py`
+Файл `config.py`
 
 ```python id="a8h2wy"
 PROMPTS = {
-    "FastMode": "Отвечай кратко и по делу.",
-    "DetailedMode": "Отвечай подробно и понятно.",
+    "FastMode": "Отвечай кратко и по делу...",
+    "DetailedMode": "Отвечай подробно и понятно...",
 }
 ```
 
-Можно легко добавить свои режимы.
+Легко можно поменять системные промпты.
 
 ---
 
@@ -215,9 +201,9 @@ PROMPTS = {
 
 ```python id="k6z4mv"
 user_history = {
-    123456789: [
-        {"role": "user", "content": "Привет"},
-        {"role": "assistant", "content": "Привет!"}
+    user_id: [
+        {"role": "user", "content": "Что мы используем для обходов блокировок?"},
+        {"role": "assistant", "content": "Привет! Мы используем zapret-dis.."}
     ]
 }
 ```
