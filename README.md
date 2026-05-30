@@ -165,7 +165,7 @@ OPENROUTER_KEY = 'COPY_TOKEN_FROM_OPENROUTER_HERE'
 ### 4. Запустить
 
 ```bash id="u5y8re"
-python main.py
+python run.py
 ```
 
 ---
